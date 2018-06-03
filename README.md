@@ -6,7 +6,9 @@ A lightweight PHP forum system using PDO sqlite. Inspired by [Xeoncross/forumfiv
 * 12 PHP files
 * 30kb
 
+Database file and structure if doesnt exist will be created on first sign in, see the login.php code.
 
+<br><br>
 This project uses the following 3rd-party dependencies :
 * [bootstrap](https://getbootstrap.com/)
 * [summernote](https://github.com/summernote/summernote/) with [jQuery](https://github.com/jquery/jquery)
