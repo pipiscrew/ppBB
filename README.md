@@ -17,6 +17,6 @@ This project uses the following 3rd-party dependencies :
 * [summernote](https://github.com/summernote/summernote/) with [jQuery](https://github.com/jquery/jquery)
 
 <br><br>
-Copyright (c) 2017 [PipisCrew](http://pipiscrew.com)
+Copyright (c) 2018 [PipisCrew](http://pipiscrew.com)
 
 Licensed under the [MIT license](http://www.opensource.org/licenses/mit-license.php).
