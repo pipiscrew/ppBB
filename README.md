@@ -13,6 +13,9 @@ This project uses the following 3rd-party dependencies :
 * [bootstrap](https://getbootstrap.com/)
 * [summernote](https://github.com/summernote/summernote/) with [jQuery](https://github.com/jquery/jquery)
 
+<br>
+![in nutshell](https://user-images.githubusercontent.com/3852762/40888929-df5441e4-675e-11e8-8826-50c172523485.jpg)
+
 <br><br>
 Copyright (c) 2017 [PipisCrew](http://pipiscrew.com)
 
