@@ -6,5 +6,5 @@ A lightweight PHP forum system using PDO sqlite. Inspired by [Xeoncross/forumfiv
 * 30kb
 
 This project uses the following 3rd-party dependencies :
-* [nootstrap](https://getbootstrap.com/)
+* [bootstrap](https://getbootstrap.com/)
 * [summernote](https://github.com/summernote/summernote/) with [jQuery](https://github.com/jquery/jquery)
