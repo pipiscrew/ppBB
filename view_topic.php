@@ -13,19 +13,32 @@ require_once('general.php');
 $db = new dbase();
 $db->connect_sqlite();
 
-//update topic views when user is not logged in
-if (!isset($_SESSION["id"])) { 
-	$db->executeSQL("update topics set topic_views=topic_views+1 where topic_id = ?", array($topic_id)); //increase the topic views
-}
-
 $sql = <<<EOD
-select replies.*,topics.topic_name,topics.category_id  from replies 
+select replies.*,topics.topic_name,topics.category_id, categories.cat_private  from replies 
 left join topics on topics.topic_id = replies.topic_id 
+left join categories on categories.cat_id = topics.category_id 
 where replies.topic_id = ? 
 order by reply_id
 EOD;
 
 $rows = $db->getSet($sql, array($topic_id));
+
+//when no admin
+if (!isset($_SESSION["id"])) {
+
+	//if rows exist
+	if ($rows) {
+
+		//check if is private , otherwise null the result
+		if ($rows[0]['cat_private'] == 1 ) {
+				$rows = array();
+		}
+	    else {
+			//update topic views when user is not logged in
+			$db->executeSQL("update topics set topic_views=topic_views+1 where topic_id = ?", array($topic_id)); //increase the topic views
+		}
+	}
+}
 
 if (!$rows)
 {

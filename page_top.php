@@ -21,11 +21,30 @@ if (isset($_SESSION['login_expiration']) && $_SESSION["login_expiration"] != dat
 		<!-- bootstrap -->
 		<link href="assets/bootstrap.min.css" rel="stylesheet" type="text/css" />
 
-		<!-- jQuery 2.0.2 -->
-		<!-- <script src="assets/jquery.min.js" type="text/javascript"></script> -->
+<?php if (isset($_SESSION["id"])) { ?>
+		<!-- rmodal -->
+		<style>
+		.modal {
+			display: none;
+			background: rgba(0, 0, 0, .30);
+			z-index: 999;
+		}
 		
-		<!-- bootstrap http://getbootstrap.com -->
-		<!-- <script src="assets/bootstrap.min.js" type="text/javascript"></script> -->
+		.modal-body {
+			position: relative;
+			padding: 30px;
+		}
+		
+		.modal .modal-dialog {
+			position: relative;
+			margin: 30px auto;
+			width: 500px;
+			border-radius: 6px;
+			-webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+					box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+		}
+		</style>
+<?php } ?>
 	</head>
 	<body>
 		<div class="container">

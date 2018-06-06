@@ -18,26 +18,62 @@ if (!isset($_SESSION["id"])) {
 require_once('general.php');
 
 if (!isset($_POST['forum_name'])) {
-    echo "error2343";
+   echo "error2343";
    return;
 }
+
+
+if (isset($_POST['forum_id'])) {
+    $category_id = intval($_POST['forum_id']);
+
+    if ($category_id == 0)  {
+        unset($category_id);
+    }
+
+}
+
 
 $db = new dbase();
 $db->connect_sqlite();
 
-$sql = "INSERT INTO categories (cat_name) VALUES (:cat_name)";
+if (isset($category_id)) {
 
-$stmt =$db->getConnection()->prepare($sql);
+    // UPDATE
+
+    $sql = 'update categories set cat_name = :cat_name, cat_private = :cat_private where cat_id = :cat_id';
+
+    $stmt = $db->getConnection()->prepare($sql);
+
+    $stmt->bindValue(':cat_id' , $category_id);
+}
+else 
+{   // INSERT
+
+    $sql = 'INSERT INTO categories (cat_name, cat_private) VALUES (:cat_name, :cat_private)';
+
+    $stmt = $db->getConnection()->prepare($sql);
+}
+
 
 $stmt->bindValue(':cat_name' , $_POST['forum_name']);
+$stmt->bindValue(':cat_private' , $_POST['forum_private']);
 
 $stmt->execute();
 
-if ($stmt->errorCode()!='00000')
+
+//if ($stmt->errorCode()!='00000')
+if ( $stmt->rowCount() != 1 )
 {
-    echo "couldnt insert the record to forums";
+    echo 'couldnt insert the record to forums';
     return;
-}
-else {
-    header('Location: .');
+
+} else {
+
+    if (isset($category_id))        // UPDATE
+        echo json_encode(array('status' => '1'));
+    else {
+        $new_rec_id = $db->getConnection()->lastInsertId();
+
+        echo json_encode(array('status' => '1', 'rec_id' => $new_rec_id));
+    }
 }

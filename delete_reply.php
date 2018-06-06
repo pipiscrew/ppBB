@@ -33,7 +33,7 @@ $reply_id = intval($_GET['reply_id']);
 $db = new dbase();
 $db->connect_sqlite();
 
-$reply_row = $db->getRow("select topic_id from replies where reply_id=?",array($reply_id));
+$reply_row = $db->getRow("select topic_id from replies where reply_id=?", array($reply_id));
 
 if (!$reply_row){	
  		echo "error986";

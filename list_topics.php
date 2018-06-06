@@ -7,21 +7,29 @@ else
 
 require_once('page_top.php');
 
-
 require_once('general.php');
+
 $db = new dbase();
 $db->connect_sqlite();
 
 $sql = <<<EOD
-select topics.*,replies.reply_dateupd as 'reply_daterec', count(replies.topic_id)-1 as 'replies' from topics 
+select topics.*,replies.reply_dateupd as 'reply_daterec', count(replies.topic_id)-1 as 'replies', categories.cat_private from topics 
 left join replies on replies.topic_id = topics.topic_id 
+left join categories on categories.cat_id = topics.category_id 
 where topics.category_id = ? 
 group by topics.topic_name 
-order by reply_daterec,topics.topic_name
+order by reply_daterec DESC,topics.topic_name
 EOD;
 
 $rows = $db->getSet($sql, array($category_id));
 
+//if rows exist
+if ($rows) {
+	//check if is private and is admin, otherwise null the result
+	if (!isset($_SESSION["id"]) && $rows[0]['cat_private'] == 1 ) {
+			$rows = array();
+	}
+}
 ?>
 
 	<a class="btn btn-default" href=".">
