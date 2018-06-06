@@ -14,8 +14,11 @@ Database file and structure if doesnt exist will be created on first sign in, se
 
 rev2
 *list topic date DESC
+
 +add&edit button on forum list
+
 +forum can declared 'private', displayed only on 'logged in user' (new field cat_private at categories table)
+
 
 <br><br>
 This project uses the following 3rd-party dependencies :
