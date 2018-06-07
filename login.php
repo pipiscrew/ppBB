@@ -6,7 +6,6 @@ date_default_timezone_set('UTC');
 require_once('general.php');
 
 if (isset($_GET['logout'])) {
-	@session_start();
 	session_destroy();
 	header("Location: index.php");
 	return;

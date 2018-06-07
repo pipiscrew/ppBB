@@ -1,4 +1,11 @@
 <?php
+/* used by 
+	add_topic
+	index
+	list_topics
+	view_topic
+*/
+
 @session_start();
 
 date_default_timezone_set("UTC");
@@ -7,7 +14,57 @@ if (isset($_SESSION['login_expiration']) && $_SESSION["login_expiration"] != dat
 {	
 	session_destroy();
 }
+
+if (isset($_SESSION["id"])) {
+	$is_admin = true;
+}
+else {
+	$is_admin = false;
+}
+
+require_once('general.php');
+
+$db = new dbase();
+$db->connect_sqlite();
+
+function breadcrumb($db, $category_id){
+//returns an array [0] breadcrumb [1] is_private
+
+	$is_private = 0;
+
+	$id = $category_id;
+
+	$breadcrumb = array();
 	
+	while ($id != 0){	
+		
+		$row = $db->getRow("select cat_id, cat_parent_id, cat_name, cat_private from categories where cat_id = $id", null);
+
+		if (!$row) {
+			return false;
+		}
+
+		$breadcrumb[] = array($row['cat_id'], $row['cat_name']);
+
+		$id = $row['cat_parent_id'];
+
+		if (($row['cat_private']) > $is_private)
+			$is_private = ($row['cat_private']);
+	}
+
+	$breadcrumb = array_reverse($breadcrumb);
+
+	$output = '<a href="."><span class="glyphicon glyphicon glyphicon-home"></span></a>';
+	foreach($breadcrumb as $crumb) {
+
+		if ($category_id == $crumb[0])
+			$output .= " > <span class='btn btn-success btn-xs'>$crumb[1]</span>";//$output .= " > <a class='btn btn-success btn-xs' href='list_topics.php?id=$crumb[0]'>$crumb[1]</a>";
+		else 
+		 	$output .= " > <a href='list_topics.php?id=$crumb[0]'>$crumb[1]</a>";
+	}
+
+	return array('<div class="row" style="margin-left:0px;margin-bottom:20px">' . $output . '</div>', $is_private);// '<br><br>';
+}
 ?>
 
 <!DOCTYPE html>

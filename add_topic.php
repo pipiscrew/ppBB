@@ -1,8 +1,6 @@
 <?php
 @session_start();
 
-date_default_timezone_set("UTC");
-
 if (isset($_SESSION['login_expiration']) && $_SESSION["login_expiration"] != date("Y-m-d"))
 {	
 	echo '>> login expired <<';
@@ -15,11 +13,8 @@ if (!isset($_SESSION["id"])) {
 }
 // VALIDATION^
 
-require_once('general.php');
+require_once('page_top.php');
 
-
-$db = new dbase();
-$db->connect_sqlite();
 	
 
 if ( (!isset($_GET['topic_id'])) && (!isset($_GET['category_id']) && !isset($_GET['reply_id']))         )
@@ -27,9 +22,9 @@ if ( (!isset($_GET['topic_id'])) && (!isset($_GET['category_id']) && !isset($_GE
 else if (isset($_GET['category_id']))
 	$category_id = intval($_GET['category_id']);  	//when adding new topic
 else if (isset($_GET['topic_id'])){
-	//when adding a new repy to topic
+	//when adding a new reply to topic
 	$reply_topic_id = intval($_GET['topic_id']);
-	$category_id =$db->getScalar("select category_id from topics where topic_id=?",array($reply_topic_id));
+	$category_id = $db->getScalar("select category_id from topics where topic_id=?",array($reply_topic_id));
 	$add_reply = true;
 }
 else 
@@ -37,12 +32,17 @@ else
 	$reply_id = intval($_GET['reply_id']);			//when editing an existing topic
 	
 	
+	
 	//read reply record details
 	$reply_row = $db->getRow("select reply_body, topic_id from replies where reply_id=?",array($reply_id));
+
+	
 	
 	if ($reply_row){
 		$reply_val = $reply_row['reply_body'];
 		$reply_topic_id = $reply_row['topic_id'];
+
+		$category_id =$db->getScalar("select category_id from topics where topic_id=?",array($reply_row['topic_id']));
 		
 		//identify if is editing 'HEAD reply'
 		$reply_min_id = $db->getScalar("select min(reply_id) from replies where topic_id=?",array($reply_topic_id));
@@ -58,8 +58,22 @@ else
 	}
 	
 }
-	
-require_once('page_top.php');
+
+//
+$breadcrumb_info = breadcrumb($db, $category_id);
+if (!$breadcrumb_info)
+{	
+	echo '>> category not found <<';
+	return;
+}
+
+if (!$is_admin) {
+	echo '>> user is not logged in <<';
+	return;	
+} else {
+	echo $breadcrumb_info[0];
+}
+//
 
 ?>
 

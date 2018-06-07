@@ -1,4 +1,5 @@
 <?php
+@session_start();
 
 if (!isset($_GET['id']))
 	return;
@@ -7,43 +8,74 @@ else
 
 require_once('page_top.php');
 
-require_once('general.php');
+$breadcrumb_info = breadcrumb($db, $category_id);
 
-$db = new dbase();
-$db->connect_sqlite();
+if (!$breadcrumb_info)
+{	
+	echo '>> category not found <<';
+	return;
+}
 
+//query for subforums
+if ($is_admin) {
+	$sql = "select * from categories where cat_parent_id = $category_id order by cat_order, cat_name";
+}
+else {
+	$sql = "select * from categories where cat_private = 0 and cat_parent_id = $category_id order by cat_order, cat_name";
+}
+
+$cat_rows = $db->getSet($sql, null);
+//query for subforums
+
+
+
+//topics query
 $sql = <<<EOD
-select topics.*,replies.reply_dateupd as 'reply_daterec', count(replies.topic_id)-1 as 'replies', categories.cat_private from topics 
+select topics.*,replies.reply_dateupd as 'reply_daterec', count(replies.topic_id)-1 as 'replies' from topics 
 left join replies on replies.topic_id = topics.topic_id 
-left join categories on categories.cat_id = topics.category_id 
 where topics.category_id = ? 
 group by topics.topic_name 
 order by reply_daterec DESC,topics.topic_name
 EOD;
 
-$rows = $db->getSet($sql, array($category_id));
+$topic_rows = $db->getSet($sql, array($category_id));
 
-//if rows exist
-if ($rows) {
-	//check if is private and is admin, otherwise null the result
-	if (!isset($_SESSION["id"]) && $rows[0]['cat_private'] == 1 ) {
-			$rows = array();
-	}
+
+
+if (!$is_admin && $breadcrumb_info[1] == 1) {
+	$topic_rows = $cat_rows = array();
+} else if ($is_admin || (!$is_admin && $breadcrumb_info[1] == 0)) {
+	echo $breadcrumb_info[0];
 }
+
+
 ?>
 
-	<a class="btn btn-default" href=".">
-		<span class="glyphicon glyphicon-chevron-left"></span> back2forums
-	</a>
 
-	<?php if (isset($_SESSION["id"])) { ?>
 
-		<a class="btn btn-default btn-primary" href="add_topic.php?category_id=<?=$category_id;?>">
-			<span class="glyphicon glyphicon-plus"></span> new topic
-		</a>
+			<div id="subforums_panel" class="panel panel-default" style="margin-top:20px; <?= (sizeof($cat_rows) == 0) ? 'display:none;' : ''; ?> ">
+				<div class="panel-heading">
+					<h3 class="panel-title">Subforums</h3>
+				</div>
+				<div class="panel-body">
 
-	<?php } ?>
-	
+<?php require_once('forums_list.php'); ?>
+
+				</div>
+			</div>
+			
+<?php if ($is_admin) { ?>
+
+	<button class="btn btn-default btn-success pull-right" onclick="add_new();">
+		<span class="glyphicon glyphicon-plus"></span> new subforum
+	</button>
+
+	<a class="btn btn-default btn-primary" href="add_topic.php?category_id=<?=$category_id;?>">
+		<span class="glyphicon glyphicon-plus"></span> new topic
+	</a> 
+	<br><br>
+
+<?php } ?>
 				<table class="table table-hover">
 					<thead>
 						<tr>
@@ -58,25 +90,25 @@ if ($rows) {
 					<tbody>
 
 
-					<?php foreach($rows as $row) { ?>
+					<?php foreach($topic_rows as $topic_row) { ?>
 						<tr class="topics">
 							<td>
 								<img src="assets/user_icon.png" class="img-polaroid" />
 							</td>
 							<td>
-								<a href="view_topic.php?id=<?= $row['topic_id']; ?>"><?= $row['topic_name']; ?></a><br>
+								<a href="view_topic.php?id=<?= $topic_row['topic_id']; ?>"><?= $topic_row['topic_name']; ?></a><br>
 							</td>
 							<td>
-								<?= $row['topic_daterec']; ?>
+								<?= $topic_row['topic_daterec']; ?>
 							</td>
 							<td>
-								<?= $row['reply_daterec']; ?>
+								<?= $topic_row['reply_daterec']; ?>
 							</td>
 							<td>
-								<?= $row['replies']; ?>
+								<?= $topic_row['replies']; ?>
 							</td>
 							<td>
-								<?= $row['topic_views']; ?>
+								<?= $topic_row['topic_views']; ?>
 							</td>
 						</tr>
 					<?php } ?>
