@@ -13,16 +13,16 @@ Database file and structure if doesnt exist will be created on first sign in, se
 
 
 rev2
-• list topic date DESC
-• add&edit button on forum list
-• forum can declared 'private', displayed only on 'logged in user' (new field cat_private at categories table)
+* list topic date DESC
+* add&edit button on forum list
+* forum can declared 'private', displayed only on 'logged in user' (new field cat_private at categories table)
 
 
 rev3
-• proof on random integer on url parameters + a child cant be accessible when any of the parents (subforums) is private
-• SortOrder inputbox on forums
-• subforums implemented (new field cat_parent_id at categories table)
-• breadcrumb
+* proof on random integer on url parameters + a child cant be accessible when any of the parents (subforums) is private
+* SortOrder inputbox on forums
+* subforums implemented (new field cat_parent_id at categories table)
+* breadcrumb
 
 
 <br><br>
