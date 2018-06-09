@@ -15,13 +15,18 @@ if (!isset($_SESSION["id"])) {
 
 require_once('page_top.php');
 
-	
+$add_new = false;
+$add_reply = false;
+$edit_head = false;
 
 if ( (!isset($_GET['topic_id'])) && (!isset($_GET['category_id']) && !isset($_GET['reply_id']))         )
 	return;
-else if (isset($_GET['category_id']))
+else if (isset($_GET['category_id'])){
 	$category_id = intval($_GET['category_id']);  	//when adding new topic
+	$add_new = true;
+}
 else if (isset($_GET['topic_id'])){
+
 	//when adding a new reply to topic
 	$reply_topic_id = intval($_GET['topic_id']);
 	$category_id = $db->getScalar("select category_id from topics where topic_id=?",array($reply_topic_id));
@@ -50,7 +55,9 @@ else
 		if ($reply_id==$reply_min_id) {
 			//if edit the 'HEAD reply' parse the 'topic name''
 			$topic_title = $db->getScalar("select topic_name from topics where topic_id=?",array($reply_topic_id));
-		}
+			$edit_head = true;
+		} else 
+			$edit_head = false;
 		
 	} else {
 		echo "couldnt find reply on database!";
@@ -103,7 +110,7 @@ if (!$is_admin) {
 
 	<form role="form">
 
-<?php if( (isset($category_id) || isset($topic_title)) && !isset($add_reply)) { ?>
+<?php if ( $add_new || $edit_head ) { ?>
 
 		<label for="f_name">Topic :</label>
 		<input name="topic_name" class="form-control" placeholder="Topic name" required value="<?= (isset($topic_title)) ? $topic_title : ''  ;?>"><br>
@@ -114,12 +121,12 @@ if (!$is_admin) {
 		<input name="topic_id" style="display:none;" value='<?=$reply_topic_id;?>'>
 		<?php } ?>
 		
-		<?php if (isset($category_id)) { ?>
+	<?php if ($add_new || $add_reply ) { ?>
 		<input name="category_id" style="display:none;" value='<?=$category_id;?>'>
 		<?php } ?>
 		
 		<?php if (isset($reply_id)) { ?>
-		<input name="reply_id"  style="display:none;" value='<?= $reply_id;?>'>
+		<input name="reply_id" style="display:none;" value='<?= $reply_id;?>'>
 		<?php } ?>
 
 	
