@@ -24,6 +24,10 @@ rev3
 * subforums implemented (new field cat_parent_id at categories table)
 * breadcrumb
 
+rev4
+* fix malfunction on save/update reply/topic
+* make hyperlink the last forum on breadcrumb
+
 
 <br><br>
 This project uses the following 3rd-party dependencies :
