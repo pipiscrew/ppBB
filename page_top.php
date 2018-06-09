@@ -58,7 +58,7 @@ function breadcrumb($db, $category_id){
 	foreach($breadcrumb as $crumb) {
 
 		if ($category_id == $crumb[0])
-			$output .= " > <span class='btn btn-success btn-xs'>$crumb[1]</span>";//$output .= " > <a class='btn btn-success btn-xs' href='list_topics.php?id=$crumb[0]'>$crumb[1]</a>";
+			$output .= " > <a class='btn btn-success btn-xs' href='list_topics.php?id=$crumb[0]'>$crumb[1]</a>";
 		else 
 		 	$output .= " > <a href='list_topics.php?id=$crumb[0]'>$crumb[1]</a>";
 	}
