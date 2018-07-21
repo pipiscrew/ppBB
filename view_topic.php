@@ -52,9 +52,9 @@ if (!$rows) // dont let it pass!
 
 ?>
 <div class="row" style="margin-left:0px;margin-bottom:20px">
-	<a id="btn_new_topic" class="btn btn-default" href="list_topics.php?id=<?=$rows[0]['category_id'];?>">
+	<!-- <a id="btn_new_topic" class="btn btn-default" href="list_topics.php?id=<?=$rows[0]['category_id'];?>">
 		<span class="glyphicon glyphicon-chevron-left"></span> back
-	</a>
+	</a> -->
 
 	<?php if (isset($_SESSION["id"])) { ?>	
 		<a id="btn_new_topic" class="btn btn-success" href="add_topic.php?topic_id=<?=$topic_id;?>">
