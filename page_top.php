@@ -27,7 +27,7 @@ require_once('general.php');
 $db = new dbase();
 $db->connect_sqlite();
 
-function breadcrumb($db, $category_id){
+function breadcrumb($db, $category_id, $suffix = null){
 //returns an array [0] breadcrumb [1] is_private
 
 	$is_private = 0;
@@ -62,6 +62,9 @@ function breadcrumb($db, $category_id){
 		else 
 		 	$output .= " > <a href='list_topics.php?id=$crumb[0]'>$crumb[1]</a>";
 	}
+
+	if ($suffix)
+		$output .= $suffix;
 
 	return array('<div class="row" style="margin-left:0px;margin-bottom:20px">' . $output . '</div>', $is_private);// '<br><br>';
 }
@@ -108,8 +111,10 @@ function breadcrumb($db, $category_id){
 			<div class="header">
 				<nav>
 					<ul class="nav nav-pills pull-right">
-						<li><a href="https://pipiscrew.com">Home</a></li>
-<?php if (!isset($_SESSION["id"])) { ?>
+<?php if ($is_admin) { ?>
+						<li><a href="search.php">Search</a></li>
+<?php } ?>
+<?php if (!$is_admin) { ?>
 						<li><a href="login.php" id="login_button">Login</a></li>
 <?php } else  { ?>
 						<li><a href="login.php?logout=1" id="login_button">Logout</a></li>
