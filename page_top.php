@@ -112,6 +112,8 @@ function breadcrumb($db, $category_id, $suffix = null){
 				<nav>
 					<ul class="nav nav-pills pull-right">
 <?php if ($is_admin) { ?>
+						<li><a href="./cal">Calendar</a></li>
+
 						<li><a href="search.php">Search</a></li>
 <?php } ?>
 <?php if (!$is_admin) { ?>

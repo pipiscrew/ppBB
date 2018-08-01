@@ -42,7 +42,10 @@ class dbase{
     
 	function connect_sqlite() {
 		//if doesnt exist, will created.
-		$this->db = new PDO('sqlite:dbase.db');
+		$this->db = new PDO('sqlite:'.__DIR__ . DIRECTORY_SEPARATOR .'dbase.db', 0, 0, array(
+//                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,      WARNING - when ON cant create the dbase
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC));
+        
 		// $this->db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );
 		
 		//check if table has records, if not create table
@@ -53,9 +56,10 @@ class dbase{
 			$this->executeSQL('CREATE TABLE "replies" ( "reply_id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "topic_id" INTEGER, "reply_body" TEXT NOT NULL, "reply_dateupd" TEXT, "reply_user_id" INTEGER )', null);
 			$this->executeSQL('CREATE TABLE "topics" ( "topic_id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "category_id" INTEGER, "topic_name" TEXT, "topic_views" INTEGER, "topic_daterec" TEXT )', null);
 			$this->executeSQL('CREATE TABLE "users" ( "user_id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "user_mail" TEXT NOT NULL, "user_password" TEXT NOT NULL, "user_level" TEXT NOT NULL )', null);
+			$this->executeSQL('CREATE TABLE "events" ( "event_id" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "date_start" TEXT, "date_end" TEXT, "event_type" INTEGER, "event_description" TEXT, "date_rec" TEXT )', null);
 			
 			//set file, read&write only server (user cant download the dbase)
-			chmod("dbase.db", 0600);
+			chmod(__DIR__ . DIRECTORY_SEPARATOR .'dbase.db', 0600);
 		}
 	}
     

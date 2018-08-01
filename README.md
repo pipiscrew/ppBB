@@ -28,12 +28,16 @@ rev4
 * fix malfunction on save/update reply/topic
 * make hyperlink the last forum on breadcrumb
 
+rev5
+* migrate the [calendar] (https://github.com/pipiscrew/fullcalendar-php-example)
+
 
 <br><br>
 This project uses the following 3rd-party dependencies :
 * [bootstrap](https://getbootstrap.com/)
 * [summernote](https://github.com/summernote/summernote/) with [jQuery](https://github.com/jquery/jquery)
 * [rmodal](https://github.com/zewish/rmodal.js)
+* [fullcalendar](https://fullcalendar.io/)
 
 <br><br>
 Copyright (c) 2018 [PipisCrew](http://pipiscrew.com)
