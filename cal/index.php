@@ -15,6 +15,11 @@ else {
 	$is_admin = false;
 }
 
+
+//auto shows the edit modal, when id passed through URL
+if ($is_admin && isset($_GET['id']))
+    $edit_rec = $_GET['id'];
+    
 ?>
 
 <!DOCTYPE html>
@@ -74,7 +79,16 @@ else {
             format: 'yyyy-mm-dd',
             autoclose: true
         });
+        
+        $('#dtp_goto').datepicker({
+            format: 'yyyy-mm-dd',
+            autoclose: true,
+            startView: 1,
+            minViewMode: 1
+            
+        });
 
+       
         
         //form submit button
         $('#formEvent').submit(function(e) {
@@ -113,6 +127,14 @@ else {
         });
 
         cal_init();
+        
+
+        
+<?php if(isset($edit_rec)) { ?>
+        //if ID passed through URL, show edit modal
+        get_rec_details("<?=$edit_rec?>");
+<?php } ?>
+        
     }); 
     
     /////////////////////////////////////////////////// [ jQuery ends ] ///////////////////////////////////////////////////
@@ -120,8 +142,16 @@ else {
     function cal_init() {
         
         var calendar =  $('#calendar').fullCalendar({
+            customButtons: {
+                btnGotoDate: {
+                  text: 'goto',
+                  click: function() {
+                      $('#modalGotoDate').modal('toggle');
+                  }
+                }
+            },
             header: {
-                left: 'prev,next today',
+                left: 'prev,next today btnGotoDate',
                 center: 'title',
                 right: 'month,agendaWeek,agendaDay'
             },
@@ -228,6 +258,17 @@ else {
             success : function(data, textStatus, jqXHR)
             {
                 
+                if (!data)
+                {
+                    alert("ERROR - connection error");
+                    return;
+                }
+                
+                //scroll the calendar to spefic date (used only for URL edit)
+                <?php if(isset($edit_rec)) { ?>
+                    $('#calendar').fullCalendar('gotoDate', data["date_start"]);
+                <?php } ?>
+                
                 //fill controls
                 $("#dtp_start").val(data["date_start"]);
                 $("#dtp_end").val(data["date_end"]);
@@ -293,6 +334,11 @@ else {
             }
         });
     }
+    
+    function goto_date(){
+        $('#calendar').fullCalendar('gotoDate', $("#dtp_goto").val());
+        $('#modalGotoDate').modal('toggle');
+    }
 <?php } ?>
     
 </script>
@@ -312,6 +358,7 @@ else {
     <?php } else { ?>
         <ol class="breadcrumb">
             <li><a href="../"><i class="tiny-icon icon-eject">&#xe800;</i></a></li>
+            <li><a href="timeline.php">timeline</a></li>
         </ol>
     <?php } ?>
     </div> 
@@ -337,7 +384,7 @@ else {
     
     <?php if(!$is_admin) return; ?>
     
-<!-- NEW SUBCATEGORY MODAL [START] -->
+<!-- NEW EVENT MODAL [START] -->
 <div class="modal fade bs-modal-lg" id="modalEvent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
@@ -373,10 +420,10 @@ else {
 						
 						<div class="form-group">
 							<label>Comment :</label>
-							<textarea style="height: 100px;resize: none;" rows="5" id="event_descr" name="event_descr" class="form-control" placeholder="the event in detail"></textarea>
+							<textarea style="height: 200px;resize: none;" id="event_descr" name="event_descr" class="form-control" placeholder="the event in detail"></textarea>
 						</div>
                     
-                        <input id="rec_id" name="rec_id" hidden/>
+                        <input id="rec_id" name="rec_id" hidden />
                     
 						<div class="modal-footer">
 							<button id="bntDelete_Event" type="button" class="btn btn-danger pull-left" onclick="javascript:del_rec();">
@@ -395,8 +442,38 @@ else {
 		</div><!-- End of Modal content -->
 	</div><!-- End of Modal dialog -->
 </div><!-- End of Modal -->
-<!-- NEW SUBCATEGORY MODAL [END] -->
+<!-- NEW EVENT MODAL [END] -->
 
+<!-- NEW GOTODATE MODAL [START] -->
+<div class="modal fade bs-modal-lg" id="modalGotoDate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-sm">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+					×
+				</button>
+				<h4 class="modal-title" id="lblTitle_GotoDate">Goto Date</h4>
+			</div>
+			<div class="modal-body">
+                
+                <div class="input-daterange input-group" id="datepicker">
+                    <input type="text" class="input-sm form-control" id="dtp_goto" placeholder="click here"/>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        cancel
+                    </button>
+                    <button class="btn btn-primary" onClick="goto_date();">
+                        goto
+                    </button>
+                </div>
+						
+			</div><!-- End of Modal body -->
+		</div><!-- End of Modal content -->
+	</div><!-- End of Modal dialog -->
+</div><!-- End of Modal -->
+<!-- NEW GOTODATE MODAL [END] -->
 
 </body>
 </html>
