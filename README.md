@@ -10,8 +10,9 @@ Database file and structure if doesnt exist will be created on first sign in, se
 
 
 ![alt text](https://user-images.githubusercontent.com/3852762/40888929-df5441e4-675e-11e8-8826-50c172523485.jpg "Screenshot")
-
-
+<br>
+![alt text](https://user-images.githubusercontent.com/3852762/44483966-bfc6c400-a64c-11e8-98c1-eadef8433184.png "Screenshot2")
+<br>
 rev2
 * list topic date DESC
 * add&edit button on forum list
@@ -31,6 +32,8 @@ rev4
 rev5
 * migrate the [calendar] (https://github.com/pipiscrew/fullcalendar-php-example)
 
+rev6
+* (calendar) add 'goto date' + timeline! view all events vertically!
 
 <br><br>
 This project uses the following 3rd-party dependencies :
