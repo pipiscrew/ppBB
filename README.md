@@ -33,7 +33,7 @@ rev5
 * migrate the [calendar] (https://github.com/pipiscrew/fullcalendar-php-example)
 
 rev6
-* (calendar) add 'goto date' + timeline! view all events vertically!
+* (calendar) add 'goto date' + timeline! view all events vertically! (greets to [Tiki Wiki CMS](https://tiki.org) for the CSS!)
 
 <br><br>
 This project uses the following 3rd-party dependencies :
