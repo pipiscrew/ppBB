@@ -1,6 +1,8 @@
 <?php
 @session_start();
 
+date_default_timezone_set("UTC");
+
 if (isset($_SESSION['login_expiration']) && $_SESSION["login_expiration"] != date("Y-m-d"))
 {	
 	echo '>> login expired <<';

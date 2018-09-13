@@ -51,15 +51,22 @@ if (!$rows) // dont let it pass!
 }
 
 ?>
+
+
+
 <div class="row" style="margin-left:0px;margin-bottom:20px">
 	<!-- <a id="btn_new_topic" class="btn btn-default" href="list_topics.php?id=<?=$rows[0]['category_id'];?>">
 		<span class="glyphicon glyphicon-chevron-left"></span> back
 	</a> -->
 
-	<?php if (isset($_SESSION["id"])) { ?>	
+	<?php if ($is_admin) { ?>	
 		<a id="btn_new_topic" class="btn btn-success" href="add_topic.php?topic_id=<?=$topic_id;?>">
 			<span class="glyphicon glyphicon-edit"></span> reply
 		</a>
+    
+		<button id="btn_move_topic" class="btn btn-success pull-right" onclick="move_topic();">
+			<span class="glyphicon glyphicon-edit"></span> move
+		</button>
 	<?php } ?>
 </div>
 	
@@ -73,7 +80,7 @@ if (!$rows) // dont let it pass!
 					
 					<div class="media-body">
 
-						<h3 class="media-heading"><?= $rows[0]['topic_name']; ?></h4>
+						<h3 class="media-heading"><?= $rows[0]['topic_name']; ?></h3>
 
 
 						<?= $rows[0]['reply_body']; ?>
@@ -107,7 +114,7 @@ if (!$rows) // dont let it pass!
 						<div class="media">
 
 	
-								<a class="media-left" href="#">
+								<a class="media-left" id="<?= $row['reply_id'];?>" href="<?= $_SERVER['REQUEST_URI'];?>#<?= $row['reply_id'];?>">
 									<img src="assets/user_icon.png" class="img-polaroid" title="<?= $row['reply_dateupd']; ?>" />
 								</a>
 
@@ -131,7 +138,31 @@ if (!$rows) // dont let it pass!
 
 					<?php } ?>
 				</div>
-				
+
+<?php if ($is_admin) { ?>
+
+    <script>
+
+    function move_topic(){
+
+        var destination_category = prompt("Please enter an integer of existing category", "0");
+        var dest_cat = parseInt(destination_category);
+
+        if (!dest_cat) {
+            alert("ABORTED!! NO VALID VALUE!!");
+            return;
+        }
+
+        console.log(dest_cat, "success");
+
+        //https://stackoverflow.com/a/8454535
+        window.open("./move_topic.php?topic_id=<?=$topic_id;?>&new_cat_id=" + dest_cat, "_self");
+
+    }
+
+    </script>
+
+<?php } ?>
 
 <?php
 
