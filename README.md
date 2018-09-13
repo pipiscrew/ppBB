@@ -38,6 +38,8 @@ rev6
 rev7
 * 'move topic' to another category - button added to view_topic
 * view_topic, on replies the image now has id and link (allowing copy link and share the specific reply)
+
+
 <br><br>
 This project uses the following 3rd-party dependencies :
 * [bootstrap](https://getbootstrap.com/)
