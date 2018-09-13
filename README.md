@@ -45,6 +45,9 @@ This project uses the following 3rd-party dependencies :
 * [rmodal](https://github.com/zewish/rmodal.js)
 * [fullcalendar](https://fullcalendar.io/)
 
+
+
+
 <br><br>
 Copyright (c) 2018 [PipisCrew](http://pipiscrew.com)
 
