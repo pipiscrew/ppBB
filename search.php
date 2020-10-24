@@ -41,7 +41,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     else 
         die ("error");
 
-
+    $sql.= ' group by topics.topic_id ';
+    
     //prepare
     $stmt = $db->getConnection()->prepare($sql);
 
