@@ -45,7 +45,9 @@ This project uses the following 3rd-party dependencies :
 * [bootstrap](https://getbootstrap.com/)
 * [summernote](https://github.com/summernote/summernote/) with [jQuery](https://github.com/jquery/jquery)
 * [rmodal](https://github.com/zewish/rmodal.js)
-* [fullcalendar](https://fullcalendar.io/)
+* [fullcalendar](https://fullcalendar.io/)  
+
+you may also like https://github.com/handylulu/RiteCMS by @handylulu
 
 
 
